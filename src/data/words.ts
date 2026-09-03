@@ -1,4 +1,5 @@
 import frequencyList from './mongolian-frequency.txt?raw'
+import extraWordList from './mongolian-40k.txt?raw'
 
 const curatedWords = [
   'монгол', 'хэл', 'бичиг', 'ном', 'хүн', 'гэр', 'ажил', 'хичээл', 'сургууль', 'цаг',
@@ -22,5 +23,18 @@ const curatedWords = [
 
 // Public frequency list is filtered to Mongolian Cyrillic words only. Source:
 // https://github.com/frekwencja/most-common-words-multilingual
-const commonWords = frequencyList.split(/\r?\n/).map(word => word.trim().toLowerCase()).filter(word => /^[а-яөүё]{2,}$/i.test(word))
-export const mongolianWords = [...new Set([...curatedWords, ...commonWords])]
+
+
+function cleanWordList(raw: string): string[] {
+  return raw
+    .split(/\r?\n/)
+    .map(word => word.trim().toLowerCase())
+    .filter(word => /^[а-яөүё]{2,}$/i.test(word))
+}
+
+const commonWords = cleanWordList(frequencyList)
+const extraWords = cleanWordList(extraWordList)
+export const mongolianWords = [...new Set([...curatedWords, ...commonWords, ...extraWords])]
+
+
+console.log('mongolianWords count:', mongolianWords.length)
